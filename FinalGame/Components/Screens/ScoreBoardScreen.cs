@@ -3,12 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SnakeGame.Components.Levels;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
+using SnakeGame.Entity;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SnakeGame.Components.Screens
 {
-    public class AboutScreen : GameScreen
+    public class ScoreBoardScreen : GameScreen
     {
         private SpriteFont _font;
         private ScreenManager _screenManager;
@@ -16,19 +17,30 @@ namespace SnakeGame.Components.Screens
         private Menu _menu;
         private MouseState currentMouseState;
         private Vector2 mousePosition;
-        private Song hoverSound;
+        public List<GameState> gameStates = new List<GameState>(); 
+        public GameState gameState = new GameState();
 
-        public AboutScreen(ScreenManager screenManager)
+        public ScoreBoardScreen(ScreenManager screenManager)
         {
+
             _screenManager = screenManager;
         }
 
         public override void LoadContent(ContentManager content)
         {
+            gameStates = gameState.LoadGameStates()
+                .OrderByDescending(gs => gs.Score) 
+                .Take(10)
+                .Where(gs => gs.Score > 0)
+                .ToList();                         
+
             _font = content.Load<SpriteFont>("Fonts/File");
             Content = content;
             _menu = new Menu(_font, Color.DarkBlue);
-            _menu.AddMenuItem(new MenuItem("Back to Main menu", new Rectangle(100, 150, 420, 50), BackToMainMenu, Color.DarkViolet, Color.Orange));
+
+            string backToMenuText = "Back to Main menu";
+
+            _menu.AddMenuItem(new MenuItem(backToMenuText, new Rectangle(100, 100, 420, 50), BackToMainMenu, Color.DarkViolet, Color.Orange));
         }
 
         public override void Update(GameTime gameTime)
@@ -44,8 +56,15 @@ namespace SnakeGame.Components.Screens
         {
             spriteBatch.Begin();
             _menu.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, "Developed by: Farrukh Rakhmanov \n", new Vector2(150, 250), Color.White);
-            spriteBatch.DrawString(_font, "Developed by: Valentine Ohalebo", new Vector2(150, 300), Color.White);
+            int spacing = 200;
+            int count = 1;
+            gameStates.ForEach(state =>
+            {
+                spriteBatch.DrawString(_font, $"{count}. Play time:  {state.PlayDate.ToShortDateString()}  Score:  {state.Score} \n", new Vector2(150, spacing), Color.White);
+                spacing += 65;
+                count++;
+            });
+
             spriteBatch.End();
         }
 

@@ -9,16 +9,19 @@ namespace SnakeGame.Components.Screens
     {
         private GameScreen _currentScreen;
         public Game _game;
+        public int _currentScore = 0;
 
         public ScreenManager(Game game)
         {
             _game = game;
         }
-        public void ChangeScreen(GameScreen newScreen, ContentManager content)
+        public void ChangeScreen(GameScreen newScreen, ContentManager content, int score = 0)
         {
             _currentScreen = newScreen;
             _currentScreen.LoadContent(content);
+            _currentScore = score;
         }
+
 
         public void Update(GameTime gameTime)
         {

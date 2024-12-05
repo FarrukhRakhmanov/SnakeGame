@@ -102,7 +102,7 @@ namespace SnakeGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Green);
+            GraphicsDevice.Clear(Color.CadetBlue);
             _screenManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }

@@ -24,7 +24,7 @@ namespace SnakeGame.Entity
         public void Create()
         {
             //Snake head
-            snakeBody.Add(new SnakeBody(300, 180));
+            snakeBody.Add(new SnakeBody(180, 420));
 
 
             //Snake body
@@ -91,72 +91,70 @@ namespace SnakeGame.Entity
 
         public void Grow()
         {
-            var tail = snakeBody.Last();
-            snakeBody.Add(new SnakeBody(tail.xPosition, tail.yPosition));
+            for (int i = 0; i < 2; i++)
+            {
+                var tail = snakeBody.Last();
+                snakeBody.Add(new SnakeBody(tail.xPosition, tail.yPosition));
+            }
         }
 
         public bool Collided()
         {
-
             Rectangle head = GetHead();
 
             // Check for wall collision
-            bool wallCollision = head.Left < 60 ||
-                                 head.Right > (ScreenWidth * 0.9) - 60 ||
-                                 head.Top < 60 ||
-                                 head.Bottom > (ScreenHeight * 0.9) - 60;
-
-
-            if (wallCollision)
-            {
+            if (IsWallCollision(head))
                 return true;
-            }
 
             // Check for self-collision
-            for (int i = 1; i < snakeBody.Count; i++)
-            {
-                bool selfCollision = snakeBody[0].xPosition == snakeBody[i].xPosition &&
-                                     snakeBody[0].yPosition == snakeBody[i].yPosition;
-                if (selfCollision)
-                {
-                    return true;
-                }
-            }
+            if (IsSelfCollision())
+                return true;
+
             return false;
         }
 
-        public bool Collided(Obstacle obstacle)
+        public bool Collided(params List<Obstacle>[] obstacles)
         {
-
             Rectangle head = GetHead();
 
             // Check for wall collision
-            bool wallCollision = head.Left < 60 ||
-                                 head.Right > (ScreenWidth*0.9) - 60 ||
-                                 head.Top < 60 ||
-                                 head.Bottom > (ScreenHeight*0.9) - 60;
+            if (IsWallCollision(head))
+                return true;
 
             // Check for obstacle collision
-            bool obstacleCollision = obstacle.Position.Intersects(head);
-
-            if (wallCollision || obstacleCollision)
+            foreach (var obstacleList in obstacles)
             {
-                return true;
+                foreach (var obstacle in obstacleList)
+                {
+                    if (obstacle != null && obstacle.Position.Intersects(head))
+                        return true;
+                }
             }
 
             // Check for self-collision
-            for (int i = 1; i < snakeBody.Count; i++)
-            {
-                bool selfCollision = snakeBody[0].xPosition == snakeBody[i].xPosition &&
-                                     snakeBody[0].yPosition == snakeBody[i].yPosition;
-                if (selfCollision)
-                {
-                    return true;
-                }
-            }
+            if (IsSelfCollision())
+                return true;
+
             return false;
         }
 
+        private bool IsWallCollision(Rectangle head)
+        {
+            return head.Left < 60 ||
+                   head.Right > (ScreenWidth * 0.9) - 60 ||
+                   head.Top < 60 ||
+                   head.Bottom > (ScreenHeight * 0.9) - 60;
+        }
 
+        private bool IsSelfCollision()
+        {
+            for (int i = 1; i < snakeBody.Count; i++)
+            {
+                if (snakeBody[0].xPosition == snakeBody[i].xPosition &&
+                    snakeBody[0].yPosition == snakeBody[i].yPosition)
+                    return true;
+            }
+            return false;
+        }
     }
 }

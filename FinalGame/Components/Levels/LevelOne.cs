@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Media;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace SnakeGame.Components.Levels
 {
@@ -24,13 +23,15 @@ namespace SnakeGame.Components.Levels
         private Texture2D _apple;
         private Texture2D _life;
         private SpriteFont _font;
+        private Texture2D _wall;
         private SpriteFont _countDownFont;
-        
+        private Texture2D _background;
+
         const int distanceFromTheScreenEdge = 3;
         Game Game;
 
         // Game elements
-        
+
         public int snakeSize = 60;
         public MySnakeGame snakeGame;
 
@@ -54,14 +55,22 @@ namespace SnakeGame.Components.Levels
         // Countdown fields
         private bool _isCountdownActive = true;
         private double _countdownTime = 3.0; // 3 seconds countdown
+        public int _currentScore = 0;
+        public Score Score;
 
-        public LevelOne(string levelName, ScreenManager screenManager)
+        //Game state saving
+        public GameState GameState;
+
+        public LevelOne(string levelName, int score, ScreenManager screenManager)
         {
             Name = levelName;
             TargetElapsedTime = TimeSpan.FromMilliseconds(targetElapsedTime);
             _screenManager = screenManager;
             snakeGame = new MySnakeGame(5);
             snakeGame.level = this;
+            _currentScore = score;
+            snakeGame.score.SetScore(_currentScore);
+            GameState = new GameState();
         }
 
         public LevelOne(ScreenManager screenManager)
@@ -78,7 +87,7 @@ namespace SnakeGame.Components.Levels
             snakeGame.snake.Create();
             isPoisoned = false;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Food food = new Food();
                 Food poisonedFood = new Food();
@@ -92,18 +101,21 @@ namespace SnakeGame.Components.Levels
                     food.Create(snakeGame.snake, poisonedFood, distanceFromTheScreenEdge);
                     snakeGame.food.Add(food);
                 }
-            }           
+
+            }
         }
 
         public override void LoadContent(ContentManager content)
         {
             Content = content;
 
-            _snakeHead = content.Load<Texture2D>("Images/snakeHead");
-            _snakeBody = content.Load<Texture2D>("Images/snakeBody");
-            _life = content.Load<Texture2D>("Images/snakeLife");
+            _snakeHead = content.Load<Texture2D>("Images/snake_green_head");
+            _snakeBody = content.Load<Texture2D>("Images/snake_green_body");
+            _life = content.Load<Texture2D>("Images/snake_head_yellow");
+            _background = content.Load<Texture2D>("Images/grass");
             _apple = content.Load<Texture2D>("Images/apple");
             _poisonedApple = content.Load<Texture2D>("Images/poisoned-apple");
+            _wall = content.Load<Texture2D>("Images/wall_block");
             _font = content.Load<SpriteFont>("Fonts/File");
             _countDownFont = content.Load<SpriteFont>("Fonts/bigFont");
             backgroundSound = content.Load<Song>("Audio/maringa-conga-246609");
@@ -196,15 +208,18 @@ namespace SnakeGame.Components.Levels
             for (int i = 0; i < snakeGame.food.Count; i++)
             {
                 if (snakeGame.food[i].WasEated(snakeGame.snake.GetHead()))
-                {
-                    snakeGame.food[i].Create(snakeGame.snake, snakeGame.poisonedFood[i], distanceFromTheScreenEdge);
-                    yummy.Play(1.0f, 0.0f, 0.0f);
-                    snakeGame.snake.Grow();
-                    snakeGame.score.IncreaseScore();
-                    isPoisoned = false;
-                }
+                    if (snakeGame.food[i].WasEated(snakeGame.snake.GetHead()))
+                    {
+                        snakeGame.food[i].Create(snakeGame.snake, snakeGame.poisonedFood.FirstOrDefault(), distanceFromTheScreenEdge);
+                        yummy.Play(1.0f, 0.0f, 0.0f);
+                        snakeGame.snake.Grow();
+                        snakeGame.score.IncreaseScore();
+                        GameState.Score = snakeGame.score.GetScore();
+                        GameState.PlayDate = DateTime.Now;
+                        isPoisoned = false;
+                    }
             }
-            
+
 
             // Check if the snake eats the poisoned food
             for (int i = 0; i < snakeGame.poisonedFood.Count; i++)
@@ -217,20 +232,24 @@ namespace SnakeGame.Components.Levels
                     snakeGame.life--;
                     snakeGame.score.DecreaseScore();
 
-                    break;                    
+                    break;
                 }
             }
             if (snakeGame.life < 1)
             {
+                GameState.SaveGameState(GameState.Score);
+
                 _isGameOver = true;
-                if(_isGameOver)
-                {                    
+                if (_isGameOver)
+                {
                     return;
                 }
             }
 
             if (snakeGame.snake.Collided())
             {
+                GameState.SaveGameState(GameState.Score);
+
                 _isCollided = true;
                 gameFail.Play(1.0f, 0.0f, 0.0f);
                 return;
@@ -238,6 +257,7 @@ namespace SnakeGame.Components.Levels
 
             if (snakeGame.score.GetScore() == 10)
             {
+                GameState.SaveGameState(GameState.Score);
                 _hasWon = true;
                 return;
             }
@@ -248,9 +268,7 @@ namespace SnakeGame.Components.Levels
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            // Draw frame
-            DrawFrame(spriteBatch, Color.LightBlue, ScreenWidth);
-
+            spriteBatch.Draw(_background, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
             if (_isCountdownActive)
             {
                 DrawCountdown(spriteBatch);
@@ -271,29 +289,25 @@ namespace SnakeGame.Components.Levels
             {
                 CollisionHandling(spriteBatch, "Collision");
             }
-            else if(_isGameOver)
+            else if (_isGameOver)
             {
                 spriteBatch.DrawString(_font, "Game Over!", new Vector2(ScreenWidth / 2 - 150, ScreenHeight / 2 - 100), Color.Red);
                 PlayAgain(spriteBatch);
                 _isGameOver = false;
             }
-            else if(_hasWon)
+            else if (_hasWon)
             {
-                spriteBatch.DrawString(_font, "You won!", new Vector2(ScreenWidth / 2 - 150, ScreenHeight / 2 - 100), Color.Red);
-                PlayAgain(spriteBatch);
+                _screenManager.ChangeScreen(new PlayScreen(_screenManager, 1, snakeGame.score.GetScore()), Content);
             }
             else
             {
                 // Set rotation for snake
                 float rotation = 0f;
 
-                // Draw snake
-                //DrawSnake(spriteBatch, rotation);
-
                 // Draw poisoned snake
                 if (isPoisoned)
                 {
-                    DrawSnake(spriteBatch, rotation, Color.Red);
+                    DrawSnake(spriteBatch, rotation, Color.Yellow);
                 }
                 else
                 {
@@ -304,19 +318,20 @@ namespace SnakeGame.Components.Levels
                 DrawFood(spriteBatch);
 
                 // Draw frame
-                DrawFrame(spriteBatch, Color.Blue, 60);
+                DrawFrame(spriteBatch, _wall, 60);
 
                 string levelInfo = "Level 1";
                 string scoreInfo = "Score: " + snakeGame.score.GetScore().ToString();
                 string lifeInfo = "Life: ";
+              
                 // Draw level and score bar                
-                spriteBatch.DrawString(_font, levelInfo, new Vector2((ScreenWidth / 10)*2, 10), Color.White);
-                spriteBatch.DrawString(_font, scoreInfo, new Vector2((ScreenWidth / 10)*4, 10), Color.White);
-                spriteBatch.DrawString(_font, lifeInfo, new Vector2(((ScreenWidth / 10)*6), 10), Color.White);
+                spriteBatch.DrawString(_font, levelInfo, new Vector2((ScreenWidth / 10) * 2, 10), Color.DarkViolet);
+                spriteBatch.DrawString(_font, scoreInfo, new Vector2((ScreenWidth / 10) * 4, 10), Color.DarkViolet);
+                spriteBatch.DrawString(_font, lifeInfo, new Vector2(((ScreenWidth / 10) * 6), 10), Color.DarkViolet);
                 int space = 150;
                 for (int i = 0; i < snakeGame.life; i++)
                 {
-                    spriteBatch.Draw(_life, new Rectangle(((ScreenWidth / 10) * 6)+space, 10, 40, 40), Color.White);
+                    spriteBatch.Draw(_life, new Rectangle(((ScreenWidth / 10) * 6) + space, 10, 40, 40), Color.White);
                     space += 50;
                 }
 
@@ -326,10 +341,16 @@ namespace SnakeGame.Components.Levels
         private void DrawCountdown(SpriteBatch spriteBatch)
         {
             string countdownText = Math.Ceiling(_countdownTime).ToString();
-            Vector2 textSize = _countDownFont.MeasureString(countdownText);
-            Vector2 position = new Vector2((ScreenWidth - textSize.X) / 2, (ScreenHeight - textSize.Y) / 2);
+            string levelInfo = "Level 1";
 
-            spriteBatch.DrawString(_countDownFont, countdownText, position, Color.Green);
+            Vector2 textSize = _countDownFont.MeasureString(countdownText);
+            Vector2 level = _countDownFont.MeasureString(levelInfo);
+
+            Vector2 positionInfo = new Vector2((ScreenWidth - level.X) / 2, (ScreenHeight - level.Y) / 2 - level.Y);
+            Vector2 positionCount = new Vector2((ScreenWidth - textSize.X) / 2, (ScreenHeight - textSize.Y) / 2);
+
+            spriteBatch.DrawString(_countDownFont, levelInfo, positionInfo, Color.DarkViolet);
+            spriteBatch.DrawString(_countDownFont, countdownText, positionCount, Color.White);
             spriteBatch.End();
         }
 
@@ -350,23 +371,6 @@ namespace SnakeGame.Components.Levels
 
         private void DrawSnake(SpriteBatch spriteBatch, float rotation, Color color)
         {
-            // Draw the game elements
-            switch (snakeGame.snake.GetDirection())
-            {
-                case Direction.UP:
-                    rotation = MathHelper.ToRadians(270);
-                    break;
-                case Direction.DOWN:
-                    rotation = MathHelper.ToRadians(90);
-                    break;
-                case Direction.LEFT:
-                    rotation = MathHelper.ToRadians(180);
-                    break;
-                case Direction.RIGHT:
-                    rotation = MathHelper.ToRadians(0);
-                    break;
-            }
-
             // Draw snake head
             spriteBatch.Draw(_snakeHead,
                 new Vector2(snakeGame.snake.GetHead().X + snakeSize / 2, snakeGame.snake.GetHead().Y + snakeSize / 2),
@@ -381,28 +385,11 @@ namespace SnakeGame.Components.Levels
             // Draw snake body
             for (int i = 1; i < snakeGame.snake.GetBody().Count; i++)
             {
-                float bodyRotation = 0f;
-                switch (snakeGame.snake.GetBody()[i].direction)
-                {
-                    case Direction.UP:
-                        bodyRotation = MathHelper.ToRadians(270);
-                        break;
-                    case Direction.DOWN:
-                        bodyRotation = MathHelper.ToRadians(90);
-                        break;
-                    case Direction.LEFT:
-                        bodyRotation = MathHelper.ToRadians(180);
-                        break;
-                    case Direction.RIGHT:
-                        bodyRotation = MathHelper.ToRadians(0);
-                        break;
-                }
-
                 spriteBatch.Draw(_snakeBody,
                     new Vector2(snakeGame.snake.GetBody()[i].xPosition + snakeSize / 2, snakeGame.snake.GetBody()[i].yPosition + snakeSize / 2),
                     new Rectangle(0, 0, snakeSize, snakeSize),
                     color,
-                    bodyRotation,
+                    rotation,
                     new Vector2(snakeSize / 2, snakeSize / 2),
                     1.0f,
                     SpriteEffects.None,
@@ -439,7 +426,7 @@ namespace SnakeGame.Components.Levels
         private void DrawBackToMainMenu(SpriteBatch spriteBatch, string text)
         {
             // Display "Press M for main menu" text when paused
-            spriteBatch.DrawString(_font, text, new Vector2(ScreenWidth / 2 - 300, ScreenHeight / 2), Color.Red);
+            spriteBatch.DrawString(_font, text, new Vector2(ScreenWidth / 2 - 300, ScreenHeight / 2), Color.DarkViolet);
         }
 
         private void CollisionHandling(SpriteBatch spriteBatch, string collisionOrPoisoned)
@@ -485,8 +472,8 @@ namespace SnakeGame.Components.Levels
         {
             var keyState = Keyboard.GetState();
             var navigationText = "Press <Space> to play again";
-            spriteBatch.DrawString(_font, navigationText, new Vector2(ScreenWidth / 2 - 300, ScreenHeight / 2 - 50), Color.Red);
-            
+            spriteBatch.DrawString(_font, navigationText, new Vector2(ScreenWidth / 2 - 300, ScreenHeight / 2 - 50), Color.DarkViolet);
+
             if (keyState.IsKeyDown(Keys.Space))
             {
                 InitializeGameComponents(); // Reset game elements
@@ -495,7 +482,7 @@ namespace SnakeGame.Components.Levels
                 _isCountdownActive = true; // Activate countdown
                 _hasWon = false;
                 _countdownTime = 3.0; // Reset countdown time
-                PlaySoundEffectForDuration(startCountDownSoundEffect, TimeSpan.FromSeconds(2));              
+                PlaySoundEffectForDuration(startCountDownSoundEffect, TimeSpan.FromSeconds(2));
             }
         }
 
@@ -507,25 +494,77 @@ namespace SnakeGame.Components.Levels
             instance.Stop();
         }
 
-        private Texture2D CreatePixelTexture(GraphicsDevice graphicsDevice, Color color)
+        private void DrawFrame(SpriteBatch spriteBatch, Texture2D spriteTexture, int spriteSize)
         {
-            Texture2D texture = new Texture2D(graphicsDevice, 1, 1);
-            texture.SetData(new[] { color });
-            return texture;
-        }
+            // Calculate the number of sprites needed for each border
+            int horizontalSprites = ScreenWidth / spriteSize;
+            int verticalSprites = ScreenHeight / spriteSize;
 
-        private void DrawFrame(SpriteBatch spriteBatch, Color color, int thickness)
-        {
-            Texture2D pixel = CreatePixelTexture(spriteBatch.GraphicsDevice, color);
+            // Top border 
+            for (int i = 0; i < horizontalSprites; i++)
+            {
+                spriteBatch.Draw(
+                    spriteTexture,
+                    new Vector2(i * spriteSize + spriteSize / 2, spriteSize / 2), // Center of the sprite
+                    null,
+                    Color.White,
+                     -MathHelper.PiOver2,
+                    new Vector2(spriteSize / 2, spriteSize / 2), // Origin at the center
+                    1f,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
 
-            // Top border
-            spriteBatch.Draw(pixel, new Rectangle(0, 0, ScreenWidth, thickness), color);
-            // Bottom border
-            spriteBatch.Draw(pixel, new Rectangle(0, ScreenHeight - thickness, ScreenWidth, thickness), color);
-            // Left border
-            spriteBatch.Draw(pixel, new Rectangle(0, 0, thickness, ScreenHeight), color);
+            // Bottom border 
+            for (int i = 0; i < horizontalSprites; i++)
+            {
+                spriteBatch.Draw(
+                    spriteTexture,
+                    new Vector2(i * spriteSize + spriteSize / 2, ScreenHeight - spriteSize / 2), // Center of the sprite
+                    null,
+                    Color.White,
+                    -MathHelper.PiOver2, // 180 degrees rotation
+                    new Vector2(spriteSize / 2, spriteSize / 2),
+                    1f,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+
+            // Left border 
+            for (int i = 0; i < verticalSprites; i++)
+            {
+                spriteBatch.Draw(
+                    spriteTexture,
+                    new Vector2(spriteSize / 2, i * spriteSize + spriteSize / 2),
+                    null,
+                    Color.White,
+                    -MathHelper.PiOver2, // -90 degrees rotation
+                    new Vector2(spriteSize / 2, spriteSize / 2),
+                    1f,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+
             // Right border
-            spriteBatch.Draw(pixel, new Rectangle(ScreenWidth - thickness, 0, thickness, ScreenHeight), color);
+            for (int i = 0; i < verticalSprites; i++)
+            {
+                spriteBatch.Draw(
+                    spriteTexture,
+                    new Vector2(ScreenWidth - spriteSize / 2, i * spriteSize + spriteSize / 2),
+                    null,
+                    Color.White,
+                    MathHelper.PiOver2, // 90 degrees rotation
+                    new Vector2(spriteSize / 2, spriteSize / 2),
+                    1f,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
         }
+
+
     }
 }

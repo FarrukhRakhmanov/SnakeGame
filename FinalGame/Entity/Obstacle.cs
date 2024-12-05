@@ -5,12 +5,9 @@ namespace SnakeGame.Entity
     public class Obstacle
     {
         public Rectangle Position { get; set; }
-        public Color Color { get; set; }
-
-        public Obstacle(Rectangle position, Color color)
+        public Obstacle(Rectangle position)
         {
             Position = position;
-            Color = color;
         }
     }
 }

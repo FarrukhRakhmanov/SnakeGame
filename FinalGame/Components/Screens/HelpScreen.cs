@@ -66,7 +66,7 @@ namespace SnakeGame.Components.Screens
             _font = content.Load<SpriteFont>("Fonts/File");
             Content = content;
             _menu = new Menu(_font, Color.DarkBlue);
-            _menu.AddMenuItem(new MenuItem("Back to Main menu", new Rectangle(ScreenWidth / 2 - 250, ScreenHeight - 150, 420, 50), BackToMainMenu, Color.White, Color.Orange));
+            _menu.AddMenuItem(new MenuItem("Back to Main menu", new Rectangle(100, 100, 420, 50), BackToMainMenu, Color.DarkViolet, Color.Orange));
         }
 
         public override void Update(GameTime gameTime)
@@ -79,12 +79,12 @@ namespace SnakeGame.Components.Screens
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            int stringLocation = 100;
+            int stringLocation = 200;
             spriteBatch.Begin();
             _menu.Draw(spriteBatch);
             foreach (string instruction in instructions)
             {
-                spriteBatch.DrawString(_fontText, instruction, new Vector2(200, stringLocation), Color.White);
+                spriteBatch.DrawString(_fontText, instruction, new Vector2(250, stringLocation), Color.White);
                 stringLocation += 30;
             }
             spriteBatch.End();

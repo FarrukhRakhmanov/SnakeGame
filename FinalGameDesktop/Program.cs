@@ -1,3 +1,3 @@
 ﻿
-using var game = new SnakeGameDesktop.Game1();
+using var game = new SnakeGameDesktop.SnakeGame();
 game.Run();

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeGameDesktop", "FinalGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAssets", "GameAssets\GameAssets.csproj", "{E4B7F930-0E1D-4F4F-8FA8-5C47D574276D}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SnakeGameInstaller", "SnakeGameInstaller\SnakeGameInstaller.vdproj", "{CAC63181-066D-4EF1-BEDD-83D85F548B3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E4B7F930-0E1D-4F4F-8FA8-5C47D574276D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4B7F930-0E1D-4F4F-8FA8-5C47D574276D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4B7F930-0E1D-4F4F-8FA8-5C47D574276D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC63181-066D-4EF1-BEDD-83D85F548B3A}.Debug|Any CPU.ActiveCfg = Debug
+		{CAC63181-066D-4EF1-BEDD-83D85F548B3A}.Debug|Any CPU.Build.0 = Debug
+		{CAC63181-066D-4EF1-BEDD-83D85F548B3A}.Release|Any CPU.ActiveCfg = Release
+		{CAC63181-066D-4EF1-BEDD-83D85F548B3A}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,9 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SnakeGame.Components.Levels;
-using SnakeGame.Components.Screens;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
 
 namespace SnakeGame.Components.Screens
 {
@@ -17,6 +14,8 @@ namespace SnakeGame.Components.Screens
         Menu _menu;
         MouseState currentMouseState;
         Vector2 mousePosition;
+        public int level;
+        public int score;
 
         public LevelScreen(ScreenManager screenManager)
         {
@@ -27,12 +26,26 @@ namespace SnakeGame.Components.Screens
         {
             _font = content.Load<SpriteFont>("Fonts/File");
             Content = content;
-
+            string levelOneText = "Level 1";
+            string levelTwoText = "Level 2";
+            string levelThreeText = "Level 3";
+            string backToMenuText = "Back to Main menu";
             _menu = new Menu(_font, Color.DarkBlue);
-            _menu.AddMenuItem(new MenuItem("Level 1", new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 200, 200, 50), ShowLevelOne, Color.White, Color.Orange));
-            _menu.AddMenuItem(new MenuItem("Level 2", new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 125, 200, 50), ShowLevelTwo, Color.White, Color.Orange));
-            _menu.AddMenuItem(new MenuItem("Level 3", new Rectangle(ScreenWidth / 2 - 100, ScreenHeight / 2 - 50, 200, 50), ShowLevelThree, Color.White, Color.Orange));
-            _menu.AddMenuItem(new MenuItem("Back to Main menu", new Rectangle(ScreenWidth / 2 - 230, ScreenHeight / 2 + 25, 450, 50), BackToMainMenu, Color.White, Color.Orange));
+            _menu.AddMenuItem(new MenuItem(levelOneText, CalculateMenuItemRectangle(levelOneText, 100), ShowLevelOne, Color.DarkViolet, Color.Orange));
+            _menu.AddMenuItem(new MenuItem(levelTwoText, CalculateMenuItemRectangle(levelTwoText, 50), ShowLevelTwo, Color.DarkViolet, Color.Orange));
+            _menu.AddMenuItem(new MenuItem(levelThreeText, CalculateMenuItemRectangle(levelThreeText, 0), ShowLevelThree, Color.DarkViolet, Color.Orange));
+            _menu.AddMenuItem(new MenuItem(backToMenuText, CalculateMenuItemRectangle(backToMenuText, -50), BackToMainMenu, Color.DarkViolet, Color.Orange));
+        }
+
+        public Vector2 CalculateMenuItemLength(string menuName)
+        {
+            return _font.MeasureString(menuName);
+        }
+
+        public Rectangle CalculateMenuItemRectangle(string menuName, int height)
+        {
+            Vector2 menuLength = CalculateMenuItemLength(menuName);
+            return new Rectangle((ScreenWidth / 2) - ((int)menuLength.X / 2) - (int)menuLength.Y * 2, (ScreenHeight / 2) - ((int)menuLength.Y / 2) - height, (int)menuLength.X, (int)menuLength.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -54,15 +67,21 @@ namespace SnakeGame.Components.Screens
 
         public void ShowLevelOne()
         {
-            _screenManager.ChangeScreen(new PlayScreen(_screenManager, 0), Content);
+            level = 0;
+            score = 0;
+            _screenManager.ChangeScreen(new PlayScreen(_screenManager, level, score), Content);
         }
         public void ShowLevelTwo()
         {
-            _screenManager.ChangeScreen(new PlayScreen(_screenManager, 1), Content);
+            level = 1;
+            score = 0;
+            _screenManager.ChangeScreen(new PlayScreen(_screenManager, level, score), Content);
         }
         public void ShowLevelThree()
         {
-            _screenManager.ChangeScreen(new PlayScreen(_screenManager, 2), Content);
+            level = 2;
+            score = 0;
+            _screenManager.ChangeScreen(new PlayScreen(_screenManager, level, score), Content);
         }
         public void BackToMainMenu()
         {

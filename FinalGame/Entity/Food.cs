@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SnakeGame.Entity
@@ -13,18 +14,20 @@ namespace SnakeGame.Entity
         Rectangle spritePosition = new Rectangle(0, 0, 60, 60);
         Rectangle position;
         public int foodSize = 60;
-        public void Create(Snake snake, Food poisonedFood, int distanceFromTheScreenEdge)
+        public void Create(Snake snake, Food poisonedFood, int distanceFromTheScreenEdge, params List<Obstacle>[] obstacles)
         {
             int x;
             int y;
+            int offset = foodSize * (distanceFromTheScreenEdge / 2);
+            int maxX = (ScreenWidth - (foodSize * distanceFromTheScreenEdge)) / foodSize;
+            int maxY = (ScreenHeight - (foodSize * distanceFromTheScreenEdge)) / foodSize;
+
             while (true)
             {
-                x = random.Next(1, (ScreenWidth - (foodSize * distanceFromTheScreenEdge)) / foodSize) * foodSize + foodSize * (distanceFromTheScreenEdge/2);
-                y = random.Next(1, (ScreenHeight - (foodSize * distanceFromTheScreenEdge)) / foodSize) * foodSize + foodSize * (distanceFromTheScreenEdge/2);
+                x = random.Next(1, maxX) * foodSize + offset;
+                y = random.Next(1, maxY) * foodSize + offset;
 
-                if (!snake.GetBody().Any(snakeBody => snakeBody.xPosition == x && snakeBody.yPosition == y) &&
-                    poisonedFood.GetPosition().X != x && poisonedFood.GetPosition().Y != y
-                    && x <= ScreenWidth-60 || x >= 60 && y <= ScreenHeight-60 && y >= 60)
+                if (IsValidFoodPosition(snake, poisonedFood, x, y, obstacles))
                 {
                     position = new Rectangle(x, y, foodSize, foodSize);
                     break;
@@ -32,25 +35,17 @@ namespace SnakeGame.Entity
             }
         }
 
-        public void Create(Snake snake, Food poisonedFood, Obstacle obstacle, int distanceFromTheScreenEdge)
+        private bool IsValidFoodPosition(Snake snake, Food poisonedFood, int x, int y, params List<Obstacle>[] obstacles)
         {
-            int x;
-            int y;
-            while (true)
-            {
-                x = random.Next(1, (ScreenWidth - (foodSize * distanceFromTheScreenEdge)) / foodSize) * foodSize + foodSize * (distanceFromTheScreenEdge / 2);
-                y = random.Next(1, (ScreenHeight - (foodSize * distanceFromTheScreenEdge)) / foodSize) * foodSize + foodSize * (distanceFromTheScreenEdge / 2);
+            bool isInSnake = snake.GetBody().Any(snakeBody => snakeBody.xPosition == x && snakeBody.yPosition == y);
+            bool isPoisonedFood = poisonedFood.GetPosition().X == x && poisonedFood.GetPosition().Y == y;
+            bool isWithinBounds = x >= 60 && x <= ScreenWidth - 60 && y >= 60 && y <= ScreenHeight - 60;
 
-                if (!snake.GetBody().Any(snakeBody => snakeBody.xPosition == x && snakeBody.yPosition == y) &&
-                    poisonedFood.GetPosition().X != x && poisonedFood.GetPosition().Y != y
-                    && x <= ScreenWidth - 60 || x >= 60 && y <= ScreenHeight - 60 && y >= 60
-                    && obstacle.Position.X != x && obstacle.Position.Y != y)
-                {
-                    position = new Rectangle(x, y, foodSize, foodSize);
-                    break;
-                }
-            }
+            bool collidesWithObstacle = obstacles.Any(obstacleList => obstacleList.Any(obstacle => obstacle.Position.X == x && obstacle.Position.Y == y));
+
+            return !isInSnake && !isPoisonedFood && isWithinBounds && !collidesWithObstacle;
         }
+
 
 
         public Rectangle GetPosition()

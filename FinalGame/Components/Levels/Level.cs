@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
+using SnakeGame.Entity;
 
 namespace SnakeGame.Components.Levels
 {
@@ -17,5 +18,6 @@ namespace SnakeGame.Components.Levels
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);
         public ContentManager Content { get; set; }
+        public Score Score { get; set; }
     }
 }
