@@ -1,15 +1,17 @@
-﻿using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using SnakeGame.Components.Screens;
-using SnakeGame.Entity;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
-using System.Linq;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using SnakeGame.Components.Screens;
+using SnakeGame.Components.Entity;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
+
+
 namespace SnakeGame.Components.Levels
 {
     public class LevelThree : Level
@@ -158,7 +160,7 @@ namespace SnakeGame.Components.Levels
             PlaySoundEffectForDuration(startCountDownSoundEffect, TimeSpan.FromSeconds(4));
         }
 
-        public override async void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (_isCountdownActive)
             {
@@ -499,13 +501,6 @@ namespace SnakeGame.Components.Levels
             instance.Play();
             await Task.Delay(duration);
             instance.Stop();
-        }
-
-        private Texture2D CreatePixelTexture(GraphicsDevice graphicsDevice, Color color)
-        {
-            Texture2D texture = new Texture2D(graphicsDevice, 1, 1);
-            texture.SetData(new[] { color });
-            return texture;
         }
 
         private void DrawFrame(SpriteBatch spriteBatch, Texture2D spriteTexture, int spriteSize)

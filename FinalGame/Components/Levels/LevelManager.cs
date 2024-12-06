@@ -34,8 +34,6 @@ namespace SnakeGame.Components.Levels
         {
             currentLevel?.Draw(spriteBatch);
         }
-
-
         public string CurrentLevelName()
         {
             if (currentLevel != null)

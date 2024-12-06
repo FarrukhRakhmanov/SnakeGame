@@ -1,14 +1,15 @@
-﻿using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using SnakeGame.Components.Screens;
-using SnakeGame.Entity;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using SnakeGame.Components.Screens;
+using SnakeGame.Components.Entity;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace SnakeGame.Components.Levels
 {
@@ -26,8 +27,8 @@ namespace SnakeGame.Components.Levels
         private Texture2D _wall;
         private SpriteFont _countDownFont;
         private Texture2D _background;
-
         const int distanceFromTheScreenEdge = 3;
+        
         Game Game;
 
         // Game elements
@@ -83,10 +84,14 @@ namespace SnakeGame.Components.Levels
 
         public void InitializeGameComponents()
         {
+            // Create snake
             snakeGame = new MySnakeGame(5);
             snakeGame.snake.Create();
+
+
             isPoisoned = false;
 
+            // Create food
             for (int i = 0; i < 3; i++)
             {
                 Food food = new Food();
@@ -101,42 +106,42 @@ namespace SnakeGame.Components.Levels
                     food.Create(snakeGame.snake, poisonedFood, distanceFromTheScreenEdge);
                     snakeGame.food.Add(food);
                 }
-
             }
         }
-
         public override void LoadContent(ContentManager content)
         {
             Content = content;
 
+            // Load snake textures
             _snakeHead = content.Load<Texture2D>("Images/snake_green_head");
             _snakeBody = content.Load<Texture2D>("Images/snake_green_body");
-            _life = content.Load<Texture2D>("Images/snake_head_yellow");
+            _life = content.Load<Texture2D>("Images/snake_green_head");
             _background = content.Load<Texture2D>("Images/grass");
+
+            // Load food textures
             _apple = content.Load<Texture2D>("Images/apple");
             _poisonedApple = content.Load<Texture2D>("Images/poisoned-apple");
-            _wall = content.Load<Texture2D>("Images/wall_block");
-            _font = content.Load<SpriteFont>("Fonts/File");
-            _countDownFont = content.Load<SpriteFont>("Fonts/bigFont");
-            backgroundSound = content.Load<Song>("Audio/maringa-conga-246609");
 
+            // Load wall texture
+            _wall = content.Load<Texture2D>("Images/wall_block");
+
+            // Load font
+            _font = content.Load<SpriteFont>("Fonts/File");
+
+            // Load countdown font
+            _countDownFont = content.Load<SpriteFont>("Fonts/bigFont");
+
+            // Load sounds
+            backgroundSound = content.Load<Song>("Audio/maringa-conga-246609");
             yummy = content.Load<SoundEffect>("Audio/gulp");
             gameFail = content.Load<SoundEffect>("Audio/crash");
             disgusting = content.Load<SoundEffect>("Audio/e-oh");
-
-
-            //startCountDownSound = content.Load<Song>("Audio/game-countdown");
             startCountDownSoundEffect = content.Load<SoundEffect>("Audio/game-countdown");
-
-
-            Content = content;
 
             // Initialize new game
             InitializeGameComponents();
             MediaPlayer.Stop();
             PlaySoundEffectForDuration(startCountDownSoundEffect, TimeSpan.FromSeconds(4));
-
-
         }
 
         public override async void Update(GameTime gameTime)
@@ -187,6 +192,7 @@ namespace SnakeGame.Components.Levels
             }
 
             // Continue with the original update logic for movement and food checks
+
             if (keyState.IsKeyDown(Keys.Up) && snakeGame.snake.GetDirection() != Direction.DOWN)
             {
                 snakeGame.snake.SetDirection(Direction.UP);

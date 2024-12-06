@@ -76,18 +76,6 @@
 /processorParam:TextureFormat=Color
 /build:Images/apple.png
 
-#begin Images/gameBackground.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/gameBackground.jpg
-
 #begin Images/grass.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -112,18 +100,6 @@
 /processorParam:TextureFormat=Color
 /build:Images/poisoned-apple.png
 
-#begin Images/snake_body_yellow.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/snake_body_yellow.png
-
 #begin Images/snake_green_body.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -147,18 +123,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/snake_green_head.png
-
-#begin Images/snake_head_yellow.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Images/snake_head_yellow.png
 
 #begin Images/snakeBackground.png
 /importer:TextureImporter

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
-using SnakeGame.Entity;
+using SnakeGame.Components.Entity;
 
 namespace SnakeGame.Components.Levels
 {

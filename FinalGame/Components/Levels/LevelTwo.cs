@@ -1,15 +1,16 @@
-﻿using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using SnakeGame.Components.Screens;
-using SnakeGame.Entity;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
-using System.Linq;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using SnakeGame.Components.Screens;
+using SnakeGame.Components.Entity;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
+
 
 namespace SnakeGame.Components.Levels
 {
@@ -81,8 +82,7 @@ namespace SnakeGame.Components.Levels
             snakeGame.score = new Score();
             GameState = new GameState();
 
-        }
-        
+        }       
 
         public LevelTwo(ScreenManager screenManager)
         {
@@ -100,9 +100,6 @@ namespace SnakeGame.Components.Levels
             snakeGame.level = this;
             int x = random.Next(0, ScreenWidth / snakeSize*2) * snakeSize + snakeSize;
             int y = random.Next(0, ScreenHeight / snakeSize*2) * snakeSize + snakeSize;
-
-            //leftBar = new Obstacle(new Rectangle(60 * 8, ScreenHeight / 6, thickness, ScreenHeight - (ScreenHeight / 3)), frameAndBarColor);
-            //rightBar = new Obstacle(new Rectangle((ScreenWidth - (60 * 8)-24), ScreenHeight / 6, thickness, ScreenHeight - (ScreenHeight / 3)), frameAndBarColor);
 
             snakeGame.snake.Create();
             isPoisoned = false;
@@ -129,9 +126,10 @@ namespace SnakeGame.Components.Levels
         {
             Content = content;
 
-            _snakeHead = content.Load<Texture2D>("Images/snake_head_yellow");
-            _snakeBody = content.Load<Texture2D>("Images/snake_body_yellow");
-            _life = content.Load<Texture2D>("Images/snake_head_yellow");
+            _snakeHead = content.Load<Texture2D>("Images/snake_green_head");
+            _snakeBody = content.Load<Texture2D>("Images/snake_green_body");
+
+            _life = content.Load<Texture2D>("Images/snake_green_head");
             _background = content.Load<Texture2D>("Images/grass");
             _apple = content.Load<Texture2D>("Images/apple");
             _wall = content.Load<Texture2D>("Images/wall_block");
@@ -324,7 +322,7 @@ namespace SnakeGame.Components.Levels
                // Draw poisoned snake
                 if (isPoisoned)
                 {
-                    DrawSnake(spriteBatch, Color.Red);
+                    DrawSnake(spriteBatch, Color.Yellow);
                 }
                 else
                 {
@@ -620,10 +618,7 @@ namespace SnakeGame.Components.Levels
                 );
                 rightVerticalBar += 60;
                 obstacles.Add(obstacle);
-                //if (rightVerticalBar >= ScreenHeight - 60)
-                //{
-                //    break;
-                //}
+
             }
         }
     }
