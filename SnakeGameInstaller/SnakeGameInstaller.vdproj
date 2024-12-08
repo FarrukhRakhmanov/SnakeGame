@@ -27,12 +27,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0F6B0621F9C44426A5C24B7669F20B1C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_101610A9CC1F4C5294E414EE3E175EB8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,18 +46,6 @@
         "Entry"
         {
         "MsmKey" = "8:_2E71A2C697C74DA9A9DE35D745ABFF38"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_343FEEAD3AE04284B50BFB01DAD2D758"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5EC4E583D9274C7ABAE146354F190E44"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -151,6 +133,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -167,6 +157,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -222,26 +228,6 @@
             {
             "SourcePath" = "8:..\\FinalGame\\Content\\bin\\DesktopGL\\Content\\Images\\snake_green_body.xnb"
             "TargetName" = "8:snake_green_body.xnb"
-            "Tag" = "8:"
-            "Folder" = "8:_E12D1AB3CE6449D9ACDDDAF8BE1B0301"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F6B0621F9C44426A5C24B7669F20B1C"
-            {
-            "SourcePath" = "8:..\\FinalGame\\Content\\bin\\DesktopGL\\Content\\Images\\gameBackground.xnb"
-            "TargetName" = "8:gameBackground.xnb"
             "Tag" = "8:"
             "Folder" = "8:_E12D1AB3CE6449D9ACDDDAF8BE1B0301"
             "Condition" = "8:"
@@ -324,46 +310,6 @@
             "TargetName" = "8:e-oh.xnb"
             "Tag" = "8:"
             "Folder" = "8:_15DE35000FFA4406B8554F7F81C88ECE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_343FEEAD3AE04284B50BFB01DAD2D758"
-            {
-            "SourcePath" = "8:..\\FinalGame\\Content\\bin\\DesktopGL\\Content\\Images\\snake_body_yellow.xnb"
-            "TargetName" = "8:snake_body_yellow.xnb"
-            "Tag" = "8:"
-            "Folder" = "8:_E12D1AB3CE6449D9ACDDDAF8BE1B0301"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5EC4E583D9274C7ABAE146354F190E44"
-            {
-            "SourcePath" = "8:..\\FinalGame\\Content\\bin\\DesktopGL\\Content\\Images\\snake_head_yellow.xnb"
-            "TargetName" = "8:snake_head_yellow.xnb"
-            "Tag" = "8:"
-            "Folder" = "8:_E12D1AB3CE6449D9ACDDDAF8BE1B0301"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -679,7 +625,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SnakeGame"
         "ProductCode" = "8:{3349A8D1-CFFF-466A-86A8-B83C96D7CFA3}"
-        "PackageCode" = "8:{ACC6CB38-66F0-425A-A8FA-11E3D0E9262E}"
+        "PackageCode" = "8:{A8A2E64D-60C0-410A-B9C3-8FA134386834}"
         "UpgradeCode" = "8:{5477F940-9DE0-4BB2-A5A3-CA42E1C01704}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -687,12 +633,12 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Farrukh"
+        "Manufacturer" = "8:Conestoga College Students Farrukh & Valentine"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Snake Game Installer"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Farrukh"
+        "ARPCONTACT" = "8:Group #7 Farrukh & Valentine"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
@@ -1228,7 +1174,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AD0BAEDF0E3E4DC3BB044EAAE298081F"
             {
-            "SourcePath" = "8:..\\FinalGame\\obj\\Debug\\net8.0\\apphost.exe"
+            "SourcePath" = "8:..\\FinalGame\\obj\\Release\\net8.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_119A216B5C77457AA407671987A4AAAF"
