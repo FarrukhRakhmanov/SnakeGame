@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using SnakeGame.Components.Levels;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using SnakeGame.Components.Entities;
+using SnakeGame.Components.Entities;
 
 namespace SnakeGame.Components.Screens
 {

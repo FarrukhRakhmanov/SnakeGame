@@ -5,11 +5,11 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using SnakeGame.Components.Screens;
-using SnakeGame.Components.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using SnakeGame.Components.Entities;
 
 
 namespace SnakeGame.Components.Levels
@@ -124,37 +124,44 @@ namespace SnakeGame.Components.Levels
 
         public override void LoadContent(ContentManager content)
         {
-            Content = content;
+            try
+            {
+                Content = content;
 
-            _snakeHead = content.Load<Texture2D>("Images/snake_green_head");
-            _snakeBody = content.Load<Texture2D>("Images/snake_green_body");
+                _snakeHead = content.Load<Texture2D>("Images/snake_green_head");
+                _snakeBody = content.Load<Texture2D>("Images/snake_green_body");
 
-            _life = content.Load<Texture2D>("Images/snake_green_head");
-            _background = content.Load<Texture2D>("Images/grass");
-            _apple = content.Load<Texture2D>("Images/apple");
-            _wall = content.Load<Texture2D>("Images/wall_block");
-            _poisonedApple = content.Load<Texture2D>("Images/poisoned-apple");
-            _font = content.Load<SpriteFont>("Fonts/File");
-            _countDownFont = content.Load<SpriteFont>("Fonts/bigFont");
-            backgroundSound = content.Load<Song>("Audio/maringa-conga-246609");
+                _life = content.Load<Texture2D>("Images/snake_green_head");
+                _background = content.Load<Texture2D>("Images/grass");
+                _apple = content.Load<Texture2D>("Images/apple");
+                _wall = content.Load<Texture2D>("Images/wall_block");
+                _poisonedApple = content.Load<Texture2D>("Images/poisoned-apple");
+                _font = content.Load<SpriteFont>("Fonts/File");
+                _countDownFont = content.Load<SpriteFont>("Fonts/bigFont");
+                backgroundSound = content.Load<Song>("Audio/maringa-conga-246609");
 
-            yummy = content.Load<SoundEffect>("Audio/gulp");
-            gameFail = content.Load<SoundEffect>("Audio/crash");
-            disgusting = content.Load<SoundEffect>("Audio/e-oh");
+                yummy = content.Load<SoundEffect>("Audio/gulp");
+                gameFail = content.Load<SoundEffect>("Audio/crash");
+                disgusting = content.Load<SoundEffect>("Audio/e-oh");
 
 
-            //startCountDownSound = content.Load<Song>("Audio/game-countdown");
-            startCountDownSoundEffect = content.Load<SoundEffect>("Audio/game-countdown");
+                //startCountDownSound = content.Load<Song>("Audio/game-countdown");
+                startCountDownSoundEffect = content.Load<SoundEffect>("Audio/game-countdown");
 
-            Content = content;
+                Content = content;
 
-            // Initialize new game
-            InitializeGameComponents();
-            MediaPlayer.Stop();
-            PlaySoundEffectForDuration(startCountDownSoundEffect, TimeSpan.FromSeconds(4));
+                // Initialize new game
+                InitializeGameComponents();
+                MediaPlayer.Stop();
+                PlaySoundEffectForDuration(startCountDownSoundEffect, TimeSpan.FromSeconds(4));
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
         }
 
-        public override async void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (_isCountdownActive)
             {

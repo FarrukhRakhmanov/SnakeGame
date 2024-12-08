@@ -5,7 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using SnakeGame.Components.Levels;
 using System.Collections.Generic;
 using System.Linq;
-using SnakeGame.Components.Entity;
+using SnakeGame.Components.Entities;
+using SnakeGame.Components.Entities;
 
 namespace SnakeGame.Components.Screens
 {

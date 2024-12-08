@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SnakeGame.Components.Levels;
 using Microsoft.Xna.Framework.Media;
+using SnakeGame.Components.Entities;
+using SnakeGame.Components.Entities;
 
 namespace SnakeGame.Components.Screens
 {
@@ -83,10 +85,8 @@ namespace SnakeGame.Components.Screens
             );
 
             // Draw the image centered
-            spriteBatch.Draw(_background, destinationRectangle, Color.White);
-                        
-            //spriteBatch.Draw(_background, new Rectangle(ScreenWidth / 2 - 450, ScreenHeight / 2 - 450, 800, 800), Color.White);
-            
+            spriteBatch.Draw(_background, destinationRectangle, Color.White);                        
+             
             _menu.Draw(spriteBatch);
             spriteBatch.End();
         }
@@ -98,20 +98,15 @@ namespace SnakeGame.Components.Screens
         public void ShowHelpMenu()
         {
             _screenManager.ChangeScreen(new HelpScreen(_screenManager), Content);
-
         }
         public void ShowAboutMenu()
         {
-            _screenManager.ChangeScreen(new AboutScreen(_screenManager), Content);
-            
+            _screenManager.ChangeScreen(new AboutScreen(_screenManager), Content);            
         }
         public void ShowScoreBoardScreen()
-        {
-            
+        {            
             _screenManager.ChangeScreen(new ScoreBoardScreen(_screenManager), Content);
-
         }
-
         public void Exit()
         {
             _screenManager.Exit();

@@ -1,10 +1,18 @@
-﻿using SnakeGame.Components.Screens;
+﻿/* Program.cs
+ * Snake Game built using .Net MonoGame Framework
+ * 
+ * Revision History
+ * Farrukh Rakhmanov, Valentine Ohalebo, 11.22.2024: Created
+ * Farrukh Rakhmanov, Valentine Ohalebo, 12.07.2024: Final Revision
+ * 
+ */
+using SnakeGame.Components.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SnakeGame.Components;
-using SnakeGame.Components.Levels;
+using Microsoft.Xna.Framework.Input.Touch;
 using System;
+using SnakeGame.Components.Entities;
 
 namespace SnakeGame
 {
@@ -70,6 +78,15 @@ namespace SnakeGame
 
         protected override void Initialize()
         {
+            // TODO: Add your initialization logic here
+            if (_platform == Platform.Android || _platform == Platform.iOS)
+            {
+                // Enable touch input
+                TouchPanel.EnabledGestures = GestureType.Tap | GestureType.DoubleTap
+                    | GestureType.Flick | GestureType.FreeDrag;
+            }
+
+
             _screenManager = new ScreenManager(this);
             SetWindowSize();
             base.Initialize();
