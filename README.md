@@ -10,3 +10,5 @@ Simple Design: Minimalist visuals and straightforward mechanics.
 🛠️ Built With
 Language: C#
 Framework: MonoGame
+
+Cross-platform Android implementation has not been finished yet.
